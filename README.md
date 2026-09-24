@@ -1,1 +1,1 @@
-# Repositorio para preubas de html
+# Repositorio para pruebas de html
