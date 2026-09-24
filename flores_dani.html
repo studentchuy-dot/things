@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rosas para Daniel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Parisienne&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --sky-top:#294e6d;
+    --sky-mid:#7ba3c7;
+    --sky-bottom:#f2e8d8;
+    --hill-light:#6f9f5d;
+    --hill-dark:#2d5a35;
+    --rose-dark:#7e0718;
+    --rose-mid:#c5152f;
+    --rose-light:#ff2f4c;
+    --rose-shadow:#52050d;
+    --leaf-dark:#214f26;
+    --leaf-light:#4d9b58;
+    --petal-highlight:#ffd7df;
+    --center-light:#f7d77a;
+    --center-dark:#b98028;
+  }
+
+  *{ box-sizing:border-box; }
+
+  html,body{
+    margin:0; padding:0; width:100%; height:100%;
+    overflow:hidden;
+    font-family:'Segoe UI', system-ui, sans-serif;
+  }
+
+  #scene{
+    position:relative;
+    width:100vw; height:100vh;
+    background: linear-gradient(to bottom,
+      var(--sky-top) 0%,
+      #6a8fb3 24%,
+      var(--sky-mid) 52%,
+      #dfe9e0 78%,
+      var(--sky-bottom) 100%);
+    overflow:hidden;
+  }
+
+  #sun{
+    position:absolute;
+    top:8%; right:12%;
+    width:110px; height:110px;
+    border-radius:50%;
+    background: radial-gradient(circle, rgba(255,245,220,0.9) 0%, rgba(255,225,180,0.38) 45%, rgba(255,225,180,0) 70%);
+    filter:blur(1px);
+    pointer-events:none;
+  }
+
+  #clouds{ position:absolute; inset:0; pointer-events:none; }
+  .cloud{
+    position:absolute;
+    left:-260px;
+    animation-name:drift;
+    animation-timing-function:linear;
+    animation-iteration-count:infinite;
+    filter: drop-shadow(0 6px 4px rgba(60,90,120,0.08));
+    opacity:0.8;
+  }
+  .cloud svg{ width:100%; height:100%; display:block; overflow:visible; }
+  @keyframes drift{
+    from{ transform:translateX(0); }
+    to{ transform:translateX(calc(100vw + 340px)); }
+  }
+
+  .hill{
+    position:absolute;
+    left:50%;
+    border-radius:50%;
+    transform:translateX(-50%);
+  }
+  #hill-back{
+    bottom:-27.5vh; width:170vw; height:40vh;
+    background: linear-gradient(to bottom, #a9d476, var(--hill-dark));
+    opacity:0.85;
+  }
+  #hill-front{
+    bottom:-26.4vh; width:150vw; height:36vh;
+    background: linear-gradient(to bottom, var(--hill-light), var(--hill-dark));
+  }
+
+  .rose-garden{
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+  }
+
+  .rose {
+    --offset-x: 0px;
+    --scale: 1;
+    position:absolute;
+    left:calc(50% + var(--offset-x));
+    bottom:2vh;
+    width:clamp(80px, 12vw, 150px);
+    transform-origin:center bottom;
+    animation:roseFloat 5.5s ease-in-out infinite;
+    filter: drop-shadow(0 8px 10px rgba(82, 12, 28, 0.18));
+    opacity: 0.98;
+  }
+
+  .rose:nth-child(1){ --offset-x:-38vw; --scale:0.82; bottom:4vh; animation-delay:-0.4s; z-index:1; }
+  .rose:nth-child(2){ --offset-x:-23vw; --scale:0.98; bottom:3vh; animation-delay:-1.2s; z-index:2; }
+  .rose:nth-child(3){ --offset-x:-9vw; --scale:1.1; bottom:4.5vh; z-index:3; }
+  .rose:nth-child(4){ --offset-x:7vw; --scale:1.18; bottom:5vh; animation-delay:-0.8s; z-index:4; }
+  .rose:nth-child(5){ --offset-x:22vw; --scale:1.05; bottom:3vh; animation-delay:-1.7s; z-index:3; }
+  .rose:nth-child(6){ --offset-x:-46vw; --scale:0.72; bottom:1.4vh; animation-delay:-2.4s; z-index:1; }
+  .rose:nth-child(7){ --offset-x:43vw; --scale:0.75; bottom:1.8vh; animation-delay:-2.9s; z-index:1; }
+
+  @keyframes roseFloat{
+    0%, 100%{ transform:translateX(-50%) rotate(-3deg) translateY(0) scale(var(--scale)); }
+    50%{ transform:translateX(-50%) rotate(3deg) translateY(-8px) scale(var(--scale)); }
+  }
+
+  .rose svg{
+    width:100%;
+    height:auto;
+    display:block;
+    overflow:visible;
+    transform:translateY(-4px);
+  }
+
+  @media (max-width: 768px) {
+    .rose {
+      width: clamp(180px, 35vw, 260px);
+      bottom: 1vh;
+    }
+
+    .rose:nth-child(1){ --offset-x:-34vw; --scale:0.9; bottom:1.5vh; }
+    .rose:nth-child(2){ --offset-x:-20vw; --scale:1.02; bottom:1.2vh; }
+    .rose:nth-child(3){ --offset-x:-7vw; --scale:1.18; bottom:2vh; }
+    .rose:nth-child(4){ --offset-x:8vw; --scale:1.26; bottom:2.2vh; }
+    .rose:nth-child(5){ --offset-x:21vw; --scale:1.12; bottom:1.4vh; }
+    .rose:nth-child(6){ --offset-x:-47vw; --scale:0.82; bottom:0.5vh; }
+    .rose:nth-child(7){ --offset-x:45vw; --scale:0.82; bottom:0.7vh; }
+
+    .rose svg {
+      transform: translateY(-18px) scale(1.12);
+    }
+  }
+
+  #title{
+    position:absolute;
+    top:5%;
+    left:50%;
+    transform:translateX(-50%);
+    font-family:'Parisienne', 'Segoe Script', 'Brush Script MT', cursive;
+    font-size:clamp(30px, 6.5vw, 54px);
+    color:rgba(255,255,255,0.95);
+    text-shadow: 0 2px 14px rgba(80,20,30,0.38), 0 1px 0 rgba(255,255,255,0.32);
+    letter-spacing:1px;
+    pointer-events:none;
+    user-select:none;
+    text-align:center;
+  }
+</style>
+</head>
+<body>
+
+<div id="scene">
+  <div id="sun"></div>
+  <div id="clouds"></div>
+
+  <div class="hill" id="hill-back"></div>
+  <div class="hill" id="hill-front"></div>
+
+  <div class="rose-garden">
+    <div class="rose">
+      <svg viewBox="0 0 240 300" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="rosePetal1" cx="35%" cy="25%" r="80%">
+            <stop offset="0%" stop-color="var(--petal-highlight)"/>
+            <stop offset="100%" stop-color="var(--rose-light)"/>
+          </radialGradient>
+          <radialGradient id="roseCenter" cx="40%" cy="30%" r="75%">
+            <stop offset="0%" stop-color="var(--center-light)"/>
+            <stop offset="100%" stop-color="var(--center-dark)"/>
+          </radialGradient>
+        </defs>
+        <g transform="rotate(-2 120 150)">
+          <path d="M120,286 C120,240 116,210 120,110" fill="none" stroke="#2f7d3a" stroke-width="8" stroke-linecap="round"/>
+          <path d="M120,210 C76,200 52,214 42,246 C76,248 102,232 120,210 Z" fill="#2f7d3a"/>
+          <path d="M120,170 C166,162 194,176 206,206 C170,210 145,191 120,170 Z" fill="#2f7d3a"/>
+
+          <g transform="translate(120 74)">
+            <g transform="rotate(0)"><ellipse cx="0" cy="-30" rx="34" ry="48" fill="url(#rosePetal1)" stroke="#8c0d1a" stroke-width="1.5"/></g>
+            <g transform="rotate(45)"><ellipse cx="0" cy="-30" rx="34" ry="48" fill="url(#rosePetal1)" stroke="#8c0d1a" stroke-width="1.5"/></g>
+            <g transform="rotate(90)"><ellipse cx="0" cy="-30" rx="34" ry="48" fill="url(#rosePetal1)" stroke="#8c0d1a" stroke-width="1.5"/></g>
+            <g transform="rotate(135)"><ellipse cx="0" cy="-30" rx="34" ry="48" fill="url(#rosePetal1)" stroke="#8c0d1a" stroke-width="1.5"/></g>
+            <g transform="rotate(180)"><ellipse cx="0" cy="-30" rx="34" ry="48" fill="url(#rosePetal1)" stroke="#8c0d1a" stroke-width="1.5"/></g>
+            <g transform="rotate(225)"><ellipse cx="0" cy="-30" rx="34" ry="48" fill="url(#rosePetal1)" stroke="#8c0d1a" stroke-width="1.5"/></g>
+            <g transform="rotate(270)"><ellipse cx="0" cy="-30" rx="34" ry="48" fill="url(#rosePetal1)" stroke="#8c0d1a" stroke-width="1.5"/></g>
+            <g transform="rotate(315)"><ellipse cx="0" cy="-30" rx="34" ry="48" fill="url(#rosePetal1)" stroke="#8c0d1a" stroke-width="1.5"/></g>
+            <circle cx="0" cy="0" r="20" fill="url(#roseCenter)"/>
+            <circle cx="0" cy="0" r="9" fill="#6b3411" opacity="0.65"/>
+          </g>
+        </g>
+      </svg>
+    </div>
+
+    <div class="rose">
+      <svg viewBox="0 0 240 300" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="rosePetal2" cx="35%" cy="25%" r="80%">
+            <stop offset="0%" stop-color="var(--petal-highlight)"/>
+            <stop offset="100%" stop-color="var(--rose-light)"/>
+          </radialGradient>
+          <radialGradient id="roseCenter2" cx="40%" cy="30%" r="75%">
+            <stop offset="0%" stop-color="var(--center-light)"/>
+            <stop offset="100%" stop-color="var(--center-dark)"/>
+          </radialGradient>
+        </defs>
+        <g transform="rotate(-1 120 150)">
+          <path d="M120,286 C120,240 116,210 120,110" fill="none" stroke="#2f7d3a" stroke-width="8" stroke-linecap="round"/>
+          <path d="M120,210 C76,200 52,214 42,246 C76,248 102,232 120,210 Z" fill="#2f7d3a"/>
+          <path d="M120,170 C166,162 194,176 206,206 C170,210 145,191 120,170 Z" fill="#2f7d3a"/>
+
+          <g transform="translate(120 74)">
+            <g transform="rotate(0)"><ellipse cx="0" cy="-30" rx="34" ry="48" fill="url(#rosePetal2)" stroke="#8c0d1a" stroke-width="1.5"/></g>
+            <g transform="rotate(45)"><ellipse cx="0" cy="-30" rx="34" ry="48" fill="url(#rosePetal2)" stroke="#8c0d1a" stroke-width="1.5"/></g>
+            <g transform="rotate(90)"><ellipse cx="0" cy="-30" rx="34" ry="48" fill="url(#rosePetal2)" stroke="#8c0d1a" stroke-width="1.5"/></g>
+            <g transform="rotate(135)"><ellipse cx="0" cy="-30" rx="34" ry="48" fill="url(#rosePetal2)" stroke="#8c0d1a" stroke-width="1.5"/></g>
+            <g transform="rotate(180)"><ellipse cx="0" cy="-30" rx="34" ry="48" fill="url(#rosePetal2)" stroke="#8c0d1a" stroke-width="1.5"/></g>
+            <g transform="rotate(225)"><ellipse cx="0" cy="-30" rx="34" ry="48" fill="url(#rosePetal2)" stroke="#8c0d1a" stroke-width="1.5"/></g>
+            <g transform="rotate(270)"><ellipse cx="0" cy="-30" rx="34" ry="48" fill="url(#rosePetal2)" stroke="#8c0d1a" stroke-width="1.5"/></g>
+            <g transform="rotate(315)"><ellipse cx="0" cy="-30" rx="34" ry="48" fill="url(#rosePetal2)" stroke="#8c0d1a" stroke-width="1.5"/></g>
+            <circle cx="0" cy="0" r="20" fill="url(#roseCenter2)"/>
+            <circle cx="0" cy="0" r="9" fill="#6b3411" opacity="0.65"/>
+          </g>
+        </g>
+      </svg>
+    </div>
+
+    <div class="rose">
+      <svg viewBox="0 0 240 300" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="rosePetal3" cx="35%" cy="25%" r="80%">
+            <stop offset="0%" stop-color="var(--petal-highlight)"/>
+            <stop offset="100%" stop-color="var(--rose-light)"/>
+          </radialGradient>
+          <radialGradient id="roseCenter3" cx="40%" cy="30%" r="75%">
+            <stop offset="0%" stop-color="var(--center-light)"/>
+            <stop offset="100%" stop-color="var(--center-dark)"/>
+          </radialGradient>
+        </defs>
+        <g transform="rotate(2 120 150)">
+          <path d="M120,286 C120,240 116,210 120,110" fill="none" stroke="#2f7d3a" stroke-width="8" stroke-linecap="round"/>
+          <path d="M120,210 C76,200 52,214 42,246 C76,248 102,232 120,210 Z" fill="#2f7d3a"/>
+          <path d="M120,170 C166,162 194,176 206,206 C170,210 145,191 120,170 Z" fill="#2f7d3a"/>
+
+          <g transform="translate(120 74)">
+            <g transform="rotate(0)"><ellipse cx="0" cy="-30" rx="34" ry="48" fill="url(#rosePetal3)" stroke="#8c0d1a" stroke-width="1.5"/></g>
+            <g transform="rotate(45)"><ellipse cx="0" cy="-30" rx="34" ry="48" fill="url(#rosePetal3)" stroke="#8c0d1a" stroke-width="1.5"/></g>
+            <g transform="rotate(90)"><ellipse cx="0" cy="-30" rx="34" ry="48" fill="url(#rosePetal3)" stroke="#8c0d1a" stroke-width="1.5"/></g>
+            <g transform="rotate(135)"><ellipse cx="0" cy="-30" rx="34" ry="48" fill="url(#rosePetal3)" stroke="#8c0d1a" stroke-width="1.5"/></g>
+            <g transform="rotate(180)"><ellipse cx="0" cy="-30" rx="34" ry="48" fill="url(#rosePetal3)" stroke="#8c0d1a" stroke-width="1.5"/></g>
+            <g transform="rotate(225)"><ellipse cx="0" cy="-30" rx="34" ry="48" fill="url(#rosePetal3)" stroke="#8c0d1a" stroke-width="1.5"/></g>
+            <g transform="rotate(270)"><ellipse cx="0" cy="-30" rx="34" ry="48" fill="url(#rosePetal3)" stroke="#8c0d1a" stroke-width="1.5"/></g>
+            <g transform="rotate(315)"><ellipse cx="0" cy="-30" rx="34" ry="48" fill="url(#rosePetal3)" stroke="#8c0d1a" stroke-width="1.5"/></g>
+            <circle cx="0" cy="0" r="20" fill="url(#roseCenter3)"/>
+            <circle cx="0" cy="0" r="9" fill="#6b3411" opacity="0.65"/>
+          </g>
+        </g>
+      </svg>
+    </div>
+
+    <div class="rose">
+      <svg viewBox="0 0 240 300" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="rosePetal4" cx="35%" cy="25%" r="80%">
+            <stop offset="0%" stop-color="var(--petal-highlight)"/>
+            <stop offset="100%" stop-color="var(--rose-light)"/>
+          </radialGradient>
+          <radialGradient id="roseCenter4" cx="40%" cy="30%" r="75%">
+            <stop offset="0%" stop-color="var(--center-light)"/>
+            <stop offset="100%" stop-color="var(--center-dark)"/>
+          </radialGradient>
+        </defs>
+        <g transform="rotate(-2 120 150)">
+          <path d="M120,286 C120,240 116,210 120,110" fill="none" stroke="#2f7d3a" stroke-width="8" stroke-linecap="round"/>
+          <path d="M120,210 C76,200 52,214 42,246 C76,248 102,232 120,210 Z" fill="#2f7d3a"/>
+          <path d="M120,170 C166,162 194,176 206,206 C170,210 145,191 120,170 Z" fill="#2f7d3a"/>
+
+          <g transform="translate(120 74)">
+            <g transform="rotate(0)"><ellipse cx="0" cy="-30" rx="34" ry="48" fill="url(#rosePetal4)" stroke="#8c0d1a" stroke-width="1.5"/></g>
+            <g transform="rotate(45)"><ellipse cx="0" cy="-30" rx="34" ry="48" fill="url(#rosePetal4)" stroke="#8c0d1a" stroke-width="1.5"/></g>
+            <g transform="rotate(90)"><ellipse cx="0" cy="-30" rx="34" ry="48" fill="url(#rosePetal4)" stroke="#8c0d1a" stroke-width="1.5"/></g>
+            <g transform="rotate(135)"><ellipse cx="0" cy="-30" rx="34" ry="48" fill="url(#rosePetal4)" stroke="#8c0d1a" stroke-width="1.5"/></g>
+            <g transform="rotate(180)"><ellipse cx="0" cy="-30" rx="34" ry="48" fill="url(#rosePetal4)" stroke="#8c0d1a" stroke-width="1.5"/></g>
+            <g transform="rotate(225)"><ellipse cx="0" cy="-30" rx="34" ry="48" fill="url(#rosePetal4)" stroke="#8c0d1a" stroke-width="1.5"/></g>
+            <g transform="rotate(270)"><ellipse cx="0" cy="-30" rx="34" ry="48" fill="url(#rosePetal4)" stroke="#8c0d1a" stroke-width="1.5"/></g>
+            <g transform="rotate(315)"><ellipse cx="0" cy="-30" rx="34" ry="48" fill="url(#rosePetal4)" stroke="#8c0d1a" stroke-width="1.5"/></g>
+            <circle cx="0" cy="0" r="20" fill="url(#roseCenter4)"/>
+            <circle cx="0" cy="0" r="9" fill="#6b3411" opacity="0.65"/>
+          </g>
+        </g>
+      </svg>
+    </div>
+
+    <div class="rose">
+      <svg viewBox="0 0 240 300" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="rosePetal5" cx="35%" cy="25%" r="80%">
+            <stop offset="0%" stop-color="var(--petal-highlight)"/>
+            <stop offset="100%" stop-color="var(--rose-light)"/>
+          </radialGradient>
+          <radialGradient id="roseCenter5" cx="40%" cy="30%" r="75%">
+            <stop offset="0%" stop-color="var(--center-light)"/>
+            <stop offset="100%" stop-color="var(--center-dark)"/>
+          </radialGradient>
+        </defs>
+        <g transform="rotate(1 120 150)">
+          <path d="M120,286 C120,240 116,210 120,110" fill="none" stroke="#2f7d3a" stroke-width="8" stroke-linecap="round"/>
+          <path d="M120,210 C76,200 52,214 42,246 C76,248 102,232 120,210 Z" fill="#2f7d3a"/>
+          <path d="M120,170 C166,162 194,176 206,206 C170,210 145,191 120,170 Z" fill="#2f7d3a"/>
+
+          <g transform="translate(120 74)">
+            <g transform="rotate(0)"><ellipse cx="0" cy="-30" rx="34" ry="48" fill="url(#rosePetal5)" stroke="#8c0d1a" stroke-width="1.5"/></g>
+            <g transform="rotate(45)"><ellipse cx="0" cy="-30" rx="34" ry="48" fill="url(#rosePetal5)" stroke="#8c0d1a" stroke-width="1.5"/></g>
+            <g transform="rotate(90)"><ellipse cx="0" cy="-30" rx="34" ry="48" fill="url(#rosePetal5)" stroke="#8c0d1a" stroke-width="1.5"/></g>
+            <g transform="rotate(135)"><ellipse cx="0" cy="-30" rx="34" ry="48" fill="url(#rosePetal5)" stroke="#8c0d1a" stroke-width="1.5"/></g>
+            <g transform="rotate(180)"><ellipse cx="0" cy="-30" rx="34" ry="48" fill="url(#rosePetal5)" stroke="#8c0d1a" stroke-width="1.5"/></g>
+            <g transform="rotate(225)"><ellipse cx="0" cy="-30" rx="34" ry="48" fill="url(#rosePetal5)" stroke="#8c0d1a" stroke-width="1.5"/></g>
+            <g transform="rotate(270)"><ellipse cx="0" cy="-30" rx="34" ry="48" fill="url(#rosePetal5)" stroke="#8c0d1a" stroke-width="1.5"/></g>
+            <g transform="rotate(315)"><ellipse cx="0" cy="-30" rx="34" ry="48" fill="url(#rosePetal5)" stroke="#8c0d1a" stroke-width="1.5"/></g>
+            <circle cx="0" cy="0" r="20" fill="url(#roseCenter5)"/>
+            <circle cx="0" cy="0" r="9" fill="#6b3411" opacity="0.65"/>
+          </g>
+        </g>
+      </svg>
+    </div>
+
+    <div class="rose">
+      <svg viewBox="0 0 240 300" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="rosePetal6" cx="35%" cy="25%" r="80%">
+            <stop offset="0%" stop-color="var(--petal-highlight)"/>
+            <stop offset="100%" stop-color="var(--rose-light)"/>
+          </radialGradient>
+          <radialGradient id="roseCenter6" cx="40%" cy="30%" r="75%">
+            <stop offset="0%" stop-color="var(--center-light)"/>
+            <stop offset="100%" stop-color="var(--center-dark)"/>
+          </radialGradient>
+        </defs>
+        <g transform="rotate(-3 120 150)">
+          <path d="M120,286 C120,240 116,210 120,110" fill="none" stroke="#2f7d3a" stroke-width="8" stroke-linecap="round"/>
+          <path d="M120,210 C76,200 52,214 42,246 C76,248 102,232 120,210 Z" fill="#2f7d3a"/>
+          <path d="M120,170 C166,162 194,176 206,206 C170,210 145,191 120,170 Z" fill="#2f7d3a"/>
+
+          <g transform="translate(120 74)">
+            <g transform="rotate(0)"><ellipse cx="0" cy="-30" rx="34" ry="48" fill="url(#rosePetal6)" stroke="#8c0d1a" stroke-width="1.5"/></g>
+            <g transform="rotate(45)"><ellipse cx="0" cy="-30" rx="34" ry="48" fill="url(#rosePetal6)" stroke="#8c0d1a" stroke-width="1.5"/></g>
+            <g transform="rotate(90)"><ellipse cx="0" cy="-30" rx="34" ry="48" fill="url(#rosePetal6)" stroke="#8c0d1a" stroke-width="1.5"/></g>
+            <g transform="rotate(135)"><ellipse cx="0" cy="-30" rx="34" ry="48" fill="url(#rosePetal6)" stroke="#8c0d1a" stroke-width="1.5"/></g>
+            <g transform="rotate(180)"><ellipse cx="0" cy="-30" rx="34" ry="48" fill="url(#rosePetal6)" stroke="#8c0d1a" stroke-width="1.5"/></g>
+            <g transform="rotate(225)"><ellipse cx="0" cy="-30" rx="34" ry="48" fill="url(#rosePetal6)" stroke="#8c0d1a" stroke-width="1.5"/></g>
+            <g transform="rotate(270)"><ellipse cx="0" cy="-30" rx="34" ry="48" fill="url(#rosePetal6)" stroke="#8c0d1a" stroke-width="1.5"/></g>
+            <g transform="rotate(315)"><ellipse cx="0" cy="-30" rx="34" ry="48" fill="url(#rosePetal6)" stroke="#8c0d1a" stroke-width="1.5"/></g>
+            <circle cx="0" cy="0" r="20" fill="url(#roseCenter6)"/>
+            <circle cx="0" cy="0" r="9" fill="#6b3411" opacity="0.65"/>
+          </g>
+        </g>
+      </svg>
+    </div>
+
+    <div class="rose">
+      <svg viewBox="0 0 240 300" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="rosePetal7" cx="35%" cy="25%" r="80%">
+            <stop offset="0%" stop-color="var(--petal-highlight)"/>
+            <stop offset="100%" stop-color="var(--rose-light)"/>
+          </radialGradient>
+          <radialGradient id="roseCenter7" cx="40%" cy="30%" r="75%">
+            <stop offset="0%" stop-color="var(--center-light)"/>
+            <stop offset="100%" stop-color="var(--center-dark)"/>
+          </radialGradient>
+        </defs>
+        <g transform="rotate(3 120 150)">
+          <path d="M120,286 C120,240 116,210 120,110" fill="none" stroke="#2f7d3a" stroke-width="8" stroke-linecap="round"/>
+          <path d="M120,210 C76,200 52,214 42,246 C76,248 102,232 120,210 Z" fill="#2f7d3a"/>
+          <path d="M120,170 C166,162 194,176 206,206 C170,210 145,191 120,170 Z" fill="#2f7d3a"/>
+
+          <g transform="translate(120 74)">
+            <g transform="rotate(0)"><ellipse cx="0" cy="-30" rx="34" ry="48" fill="url(#rosePetal7)" stroke="#8c0d1a" stroke-width="1.5"/></g>
+            <g transform="rotate(45)"><ellipse cx="0" cy="-30" rx="34" ry="48" fill="url(#rosePetal7)" stroke="#8c0d1a" stroke-width="1.5"/></g>
+            <g transform="rotate(90)"><ellipse cx="0" cy="-30" rx="34" ry="48" fill="url(#rosePetal7)" stroke="#8c0d1a" stroke-width="1.5"/></g>
+            <g transform="rotate(135)"><ellipse cx="0" cy="-30" rx="34" ry="48" fill="url(#rosePetal7)" stroke="#8c0d1a" stroke-width="1.5"/></g>
+            <g transform="rotate(180)"><ellipse cx="0" cy="-30" rx="34" ry="48" fill="url(#rosePetal7)" stroke="#8c0d1a" stroke-width="1.5"/></g>
+            <g transform="rotate(225)"><ellipse cx="0" cy="-30" rx="34" ry="48" fill="url(#rosePetal7)" stroke="#8c0d1a" stroke-width="1.5"/></g>
+            <g transform="rotate(270)"><ellipse cx="0" cy="-30" rx="34" ry="48" fill="url(#rosePetal7)" stroke="#8c0d1a" stroke-width="1.5"/></g>
+            <g transform="rotate(315)"><ellipse cx="0" cy="-30" rx="34" ry="48" fill="url(#rosePetal7)" stroke="#8c0d1a" stroke-width="1.5"/></g>
+            <circle cx="0" cy="0" r="20" fill="url(#roseCenter7)"/>
+            <circle cx="0" cy="0" r="9" fill="#6b3411" opacity="0.65"/>
+          </g>
+        </g>
+      </svg>
+    </div>
+  </div>
+
+  <div id="title">Para Daniel</div>
+
+  <svg width="0" height="0" style="position:absolute">
+    <defs>
+      <symbol id="cloud-shape" viewBox="0 0 200 120">
+        <ellipse cx="100" cy="78" rx="92" ry="30" fill="#eef7ff"/>
+        <circle cx="52" cy="58" r="30" fill="#ffffff"/>
+        <circle cx="98" cy="42" r="38" fill="#ffffff"/>
+        <circle cx="146" cy="58" r="29" fill="#ffffff"/>
+        <circle cx="172" cy="74" r="21" fill="#ffffff"/>
+      </symbol>
+    </defs>
+  </svg>
+
+</div>
+
+<script>
+  const CONFIG = {
+    cloudCount: 6
+  };
+
+  function buildClouds(){
+    const layer = document.getElementById('clouds');
+    layer.innerHTML = '';
+    for(let i = 0; i < CONFIG.cloudCount; i++){
+      const size = 90 + Math.random() * 130;
+      const top = 4 + Math.random() * 38;
+      const duration = 45 + Math.random() * 45;
+      const delay = -Math.random() * duration;
+      const div = document.createElement('div');
+      div.className = 'cloud';
+      div.style.width = size + 'px';
+      div.style.height = (size * 0.5) + 'px';
+      div.style.top = top + 'vh';
+      div.style.opacity = (0.75 + Math.random() * 0.25).toFixed(2);
+      div.style.animationDuration = duration + 's';
+      div.style.animationDelay = delay + 's';
+      div.innerHTML = '<svg viewBox="0 0 200 100"><use href="#cloud-shape"></use></svg>';
+      layer.appendChild(div);
+    }
+  }
+
+  buildClouds();
+</script>
+
+</body>
+</html>
